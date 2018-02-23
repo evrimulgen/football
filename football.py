@@ -58,7 +58,7 @@ class Code(object):
         self.dict = {"Ev":Teams[0], "Konuk":Teams[1]}
         return self.dict 
 
-get = Code(225)
+get = Code(237)
 #print get.Teams()["Ev"], get.Count(), get.weather()["stat"]
 print get.pos()
         
