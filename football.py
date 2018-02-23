@@ -1,4 +1,3 @@
-
 import urllib
 class Code(object):
     def __init__(self, code):
@@ -9,7 +8,7 @@ class Code(object):
         socket = urllib.urlopen(self.url)
         self.source = socket.readlines()
         #print self.source
-    def pos(self):
+    def generic(self):
         for e, test in enumerate(self.source, 1):
             search = "<div class='posNormal'>"
             if test.find(search) is not -1:
@@ -27,11 +26,13 @@ class Code(object):
                     self.posHTTR = pos
                 if string.find(self.Teams()["Konuk"]) is not -1:
                     self.posATTR = pos
-        self.posDict["pozisyon"] = {"Ev":self.posHTTR, "Konuk":self.posATTR}
+        self.posDict["sira"] = {"Ev":self.posHTTR, "Konuk":self.posATTR}
         self.posHTTR = int(self.posHTTR)
         self.posATTR = int(self.posATTR)
+        self.posDict["Takimlar"] = {"Ev":get.Teams()["Ev"],  "Konuk":get.Teams()["Konuk"]}
         self.posDict["delta"] = {"Ev":self.delta[self.posHTTR-1], "Konuk":self.delta[self.posATTR-1]}
         self.posDict["puan"] = {"Ev":self.points[self.posHTTR-1], "Konuk":self.points[self.posATTR-1]}
+        self.posDict["hava"] = {"stat":get.weather()["stat"].decode("utf-8"), "derece":get.weather()["c"]}
         return self.posDict
     def weather(self):
         for enum, test in enumerate(self.source,1):
@@ -59,11 +60,7 @@ class Code(object):
         self.dict = {"Ev":Teams[0], "Konuk":Teams[1]}
         return self.dict 
 
-get = Code(240)
-#print get.Teams()["Ev"], get.Count(), get.weather()["stat"]
-print get.pos()
-        
-        
-        
-        
+get = Code(107)
+#print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"]
+print get.generic()["puan"]["Konuk"]
         
