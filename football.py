@@ -1,3 +1,4 @@
+
 import urllib
 class Code(object):
     def __init__(self, code):
@@ -26,11 +27,11 @@ class Code(object):
                     self.posHTTR = pos
                 if string.find(self.Teams()["Konuk"]) is not -1:
                     self.posATTR = pos
-        self.posDict["pos"] = {"HTTR":self.posHTTR, "ATTR":self.posATTR}
+        self.posDict["pozisyon"] = {"Ev":self.posHTTR, "Konuk":self.posATTR}
         self.posHTTR = int(self.posHTTR)
         self.posATTR = int(self.posATTR)
-        self.posDict["delta"] = {"HTTR":self.delta[self.posHTTR-1], "ATTR":self.delta[self.posATTR-1]}
-        self.posDict["points"] = {"HTTR":self.points[self.posHTTR-1], "ATTR":self.points[self.posATTR-1]}
+        self.posDict["delta"] = {"Ev":self.delta[self.posHTTR-1], "Konuk":self.delta[self.posATTR-1]}
+        self.posDict["puan"] = {"Ev":self.points[self.posHTTR-1], "Konuk":self.points[self.posATTR-1]}
         return self.posDict
     def weather(self):
         for enum, test in enumerate(self.source,1):
@@ -58,10 +59,11 @@ class Code(object):
         self.dict = {"Ev":Teams[0], "Konuk":Teams[1]}
         return self.dict 
 
-get = Code(237)
+get = Code(240)
 #print get.Teams()["Ev"], get.Count(), get.weather()["stat"]
 print get.pos()
         
         
         
-  
+        
+        
