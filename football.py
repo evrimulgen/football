@@ -2,12 +2,13 @@ import urllib
 class Code(object):
     def __init__(self, code):
         self.code = str(code)
-        self.delta, self.posHTTR, self.posATTR, self.points = [], "", "", []
+        self.delta, self.posHTTR, self.posATTR, self.points, self.ligText = [], "", "", [], ""
         self.dict, self.posDict, self.deltaDict = {}, {}, {}
-        self.url = "http://istatistik.nesine.com/HeadToHead/Index.aspx?matchCode=" + self.code
-        socket = urllib.urlopen(self.url)
+        url = "http://istatistik.nesine.com/HeadToHead/Index.aspx?matchCode=" + self.code
+        socket = urllib.urlopen(url)
         self.source = socket.readlines()
         #print self.source
+        self.zero = 0
     def generic(self):
         for e, test in enumerate(self.source, 1):
             search = "<div class='posNormal'>"
@@ -33,7 +34,16 @@ class Code(object):
         self.posDict["delta"] = {"Ev":self.delta[self.posHTTR-1], "Konuk":self.delta[self.posATTR-1]}
         self.posDict["puan"] = {"Ev":self.points[self.posHTTR-1], "Konuk":self.points[self.posATTR-1]}
         self.posDict["hava"] = {"stat":get.weather()["stat"].decode("utf-8"), "derece":get.weather()["c"]}
+        self.posDict["kral"] = {"puan":self.points[self.zero]}
+        self.posDict["Ts"] = {"count":self.Count()}
+        self.posDict["Lig"] = {"Lig":self.lig()}
         return self.posDict
+    def lig(self):
+        for test in self.source:
+            search = "leagueTableTeamHeader"
+            if test.find(search) is not -1:
+                self.ligText = self.getstr(test, ">", "<").split("/")[0]
+        return self.ligText
     def weather(self):
         for enum, test in enumerate(self.source,1):
             search  = '<div class="desc">'
@@ -59,8 +69,13 @@ class Code(object):
                 Teams = test.strip()[len(search):].replace("Maçı","").replace(" - ","-").strip().split("-")
         self.dict = {"Ev":Teams[0], "Konuk":Teams[1]}
         return self.dict 
+string = """Ligin {}. sırasında olan {}. sıradaki ev sahibi {} takımı 
+evinde {}.sıradaki {} takımını konuk ediyor. Ev sahibi ile aralarında {} puan 
+farkı olan {} takımı """
+#string = string.format("test")
 
-get = Code(107)
-#print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"]
-print get.generic()["puan"]["Konuk"]
+get = Code(405)
+#print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"], get.lig()
+print get.generic()
+
         
