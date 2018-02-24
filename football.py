@@ -73,9 +73,6 @@ string = """Ligin {}. sırasında olan {}. sıradaki ev sahibi {} takımı
 evinde {}.sıradaki {} takımını konuk ediyor. Ev sahibi ile aralarında {} puan 
 farkı olan {} takımı """
 #string = string.format("test")
-
-get = Code(405)
-#print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"], get.lig()
+get = Code(130)
+#print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"]
 print get.generic()
-
-        
