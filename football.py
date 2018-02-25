@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 import urllib
 class Code(object):
     def __init__(self, code):
         self.code = str(code)
         self.delta, self.posHTTR, self.posATTR, self.points, self.ligText = [], "", "", [], ""
+        self.averageList = []
         self.dict, self.posDict, self.deltaDict = {}, {}, {}
         url = "http://istatistik.nesine.com/HeadToHead/Index.aspx?matchCode=" + self.code
         socket = urllib.urlopen(url)
@@ -21,6 +23,8 @@ class Code(object):
                 elif self.source[e+1].find("deltaUp") is not -1:
                     self.delta.append("Up")
                 points = self.getstr(self.source[e+17], ">", "<")
+                self.averageList.append(int(self.getstr(self.source[e+15], ">", "<")))
+                print self.getstr(self.source[e+15], ">", "<")
                 self.points.append(points)
                 string = self.source[e+3]
                 if string.find(self.Teams()["Ev"]) is not -1:
@@ -37,6 +41,7 @@ class Code(object):
         self.posDict["kral"] = {"puan":self.points[self.zero]}
         self.posDict["Ts"] = {"count":self.Count()}
         self.posDict["Lig"] = {"Lig":self.lig()}
+        self.posDict["Averaj"] = {"Ev":self.averageList[self.posHTTR-1], "Konuk":self.averageList[self.posATTR-1]}
         return self.posDict
     def lig(self):
         for test in self.source:
@@ -73,6 +78,9 @@ string = """Ligin {}. sırasında olan {}. sıradaki ev sahibi {} takımı
 evinde {}.sıradaki {} takımını konuk ediyor. Ev sahibi ile aralarında {} puan 
 farkı olan {} takımı """
 #string = string.format("test")
-get = Code(130)
+
+get = Code(150)
 #print get.Teams()["Ev"], get.Count(), get.weather()["stat"], get.weather()["c"]
 print get.generic()
+
+        
